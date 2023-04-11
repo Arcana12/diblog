@@ -25,4 +25,7 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
+    // Entity에 서비스 정책 넣지 말것!
+
 }
