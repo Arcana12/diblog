@@ -4,6 +4,7 @@ import com.diblog.domain.Post;
 import com.diblog.repository.PostRepository;
 import com.diblog.request.PostCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -51,7 +53,7 @@ class PostControllerTest {
 
 
         // expected
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                         .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\"}")
                 )
@@ -72,7 +74,7 @@ class PostControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                         .content(json)
                 )
@@ -96,7 +98,7 @@ class PostControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                         .content(json)
                 )
@@ -128,5 +130,31 @@ class PostControllerTest {
                 .andDo(print());
 
     }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test5() throws Exception {
+
+        Post post1 = postRepository.save(Post.builder()
+                .title("title_1")
+                .content("내용_1")
+                .build());
+
+        Post post2 = postRepository.save(Post.builder()
+                .title("title_2")
+                .content("내용_2")
+                .build());
+
+        mockMvc.perform(get("/posts")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$[1].id").value(post2.getId()))
+                .andExpect(jsonPath("$[1].title").value("title_2"))
+                .andExpect(jsonPath("$[1].content").value("내용_2"))
+                .andDo(print());
+
+    }
+
 
 }

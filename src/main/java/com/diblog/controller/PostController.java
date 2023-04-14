@@ -7,6 +7,7 @@ package com.diblog.controller;
 // vue -> vue + SSR = nuxt
 // react -> react + SSR = next
 
+import com.diblog.domain.Post;
 import com.diblog.request.PostCreate;
 import com.diblog.response.PostResponse;
 import com.diblog.service.PostService;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +25,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/posts")
+    @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request){
         // Case1. 저장한 데이터 Entity -> response로 응답하기
         // Case2. 저장한 데이터의 primary_id -> response로 응답하기
@@ -31,10 +34,17 @@ public class PostController {
         postService.write(request);
     }
 
+    // 단건 조회
     @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable(name = "postId") Long id){
         PostResponse postResponse = postService.get(id);
         return postResponse;
+    }
+
+    // 여러개의 글을 조회
+    @GetMapping("/posts")
+    public List<PostResponse> getList(){
+        return postService.getList();
     }
 
 }
