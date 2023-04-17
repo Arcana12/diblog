@@ -3,9 +3,13 @@ package com.diblog.service;
 import com.diblog.domain.Post;
 import com.diblog.repository.PostRepository;
 import com.diblog.request.PostCreate;
+import com.diblog.request.PostSearch;
 import com.diblog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +41,8 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(){
-        return postRepository.findAll().stream()
+    public List<PostResponse> getList(PostSearch postSearch){
+        return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
 

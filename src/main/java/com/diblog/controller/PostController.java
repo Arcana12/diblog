@@ -9,11 +9,14 @@ package com.diblog.controller;
 
 import com.diblog.domain.Post;
 import com.diblog.request.PostCreate;
+import com.diblog.request.PostSearch;
 import com.diblog.response.PostResponse;
 import com.diblog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,8 +46,8 @@ public class PostController {
 
     // 여러개의 글을 조회
     @GetMapping("/posts")
-    public List<PostResponse> getList(){
-        return postService.getList();
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch){
+        return postService.getList(postSearch);
     }
 
 }

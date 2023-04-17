@@ -3,6 +3,7 @@ package com.diblog.service;
 import com.diblog.domain.Post;
 import com.diblog.repository.PostRepository;
 import com.diblog.request.PostCreate;
+import com.diblog.request.PostSearch;
 import com.diblog.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,8 +11,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,30 +76,29 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 여러개 조회")
+    @DisplayName("글 1페이지 조회")
     void test3(){
         //given
-        Post requestPost = Post.builder()
-                .title("제목")
-                .content("내용")
+        List<Post> requestPosts = IntStream.range(0, 20)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("제목 - " + i)
+                            .content("내용 - " +i)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
+
+        PostSearch postSearch = PostSearch.builder()
+                .page(1)
                 .build();
 
-        postRepository.saveAll(List.of(
-                Post.builder()
-                        .title("제목")
-                        .content("내용")
-                        .build(),
-                Post.builder()
-                        .title("제목1")
-                        .content("내용1")
-                        .build()
-        ));
-
         //when
-        List<PostResponse> posts= postService.getList();
+        List<PostResponse> posts= postService.getList(postSearch);
 
         //then
-        Assertions.assertEquals(2L, postRepository.count());
+        Assertions.assertEquals(10L, posts.size());
+        Assertions.assertEquals("제목 - 19", posts.get(0).getTitle());
 
     }
 
