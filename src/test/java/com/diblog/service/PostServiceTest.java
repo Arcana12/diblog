@@ -3,6 +3,7 @@ package com.diblog.service;
 import com.diblog.domain.Post;
 import com.diblog.repository.PostRepository;
 import com.diblog.request.PostCreate;
+import com.diblog.request.PostEdit;
 import com.diblog.request.PostSearch;
 import com.diblog.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
@@ -99,6 +100,56 @@ class PostServiceTest {
         //then
         Assertions.assertEquals(10L, posts.size());
         Assertions.assertEquals("제목 - 19", posts.get(0).getTitle());
+
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4(){
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("테스트")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id=" + post.getId()));
+        assertEquals("테스트", changedPost.getTitle() );
+
+    }
+
+    @Test
+    @DisplayName("글 수정")
+    void test5(){
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("테스트")
+                .content("내용무")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id=" + post.getId()));
+        assertEquals("테스트", changedPost.getTitle());
+        assertEquals("내용무", changedPost.getContent());
 
     }
 

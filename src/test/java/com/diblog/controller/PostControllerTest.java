@@ -3,6 +3,7 @@ package com.diblog.controller;
 import com.diblog.domain.Post;
 import com.diblog.repository.PostRepository;
 import com.diblog.request.PostCreate;
+import com.diblog.request.PostEdit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
@@ -183,5 +184,27 @@ class PostControllerTest {
 
     }
 
+    @Test
+    @DisplayName("글 수정")
+    void test7() throws Exception {
 
+
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .content("내용무")
+                .build();
+
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
 }

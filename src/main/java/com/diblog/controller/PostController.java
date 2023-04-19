@@ -9,6 +9,7 @@ package com.diblog.controller;
 
 import com.diblog.domain.Post;
 import com.diblog.request.PostCreate;
+import com.diblog.request.PostEdit;
 import com.diblog.request.PostSearch;
 import com.diblog.response.PostResponse;
 import com.diblog.service.PostService;
@@ -48,6 +49,11 @@ public class PostController {
     @GetMapping("/posts")
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch){
         return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit postEdit){
+        postService.edit(postId, postEdit);
     }
 
 }
