@@ -1,9 +1,13 @@
 package com.diblog.controller;
 
+import com.diblog.exception.BlogException;
+import com.diblog.exception.InvalidRequest;
+import com.diblog.exception.PostNotFound;
 import com.diblog.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,5 +37,25 @@ public class ExceptionController {
 
         return response;
     }
+
+    @ResponseBody
+    @ExceptionHandler(BlogException.class)
+    public ResponseEntity<ErrorResponse> blogException(BlogException e){
+        int statusCode = e.statusCode();
+
+        ErrorResponse body = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        //응답 json validation -> title : 제목에 바보를 포함할 수 없습니다.
+
+        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+                .body(body);
+
+        return response;
+    }
+
 
 }
