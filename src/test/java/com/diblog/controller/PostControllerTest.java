@@ -272,3 +272,14 @@ class PostControllerTest {
 
     }
 }
+
+// API 문서 생성
+
+// GET /posts/{postId} -> 단건 조회
+// POST /posts -> 게시글 등록
+
+// 클라이언트 입장 어떤 API 있는지 모름
+
+//Spring RestDocs
+// - 운영코드에 -> 영향
+//
