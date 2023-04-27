@@ -3,9 +3,6 @@ import {onMounted, ref} from "vue";
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
 
-const title =ref("");
-const content =ref("");
-
 const router = useRouter();
 
 const props = defineProps({
