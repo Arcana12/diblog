@@ -1,7 +1,7 @@
 ## :books: Project Stacks
 - Java
 - Spring
-- Vue
+- Vue.js
 - JPA
 - Spring REST Docs
 <br>
