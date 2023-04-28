@@ -15,26 +15,62 @@ axios.get("/api/posts?page=1&size=5").then(response => {
 </script>
 
 <template>
-  <ul>
-      <li v-for="post in posts" :key="post.id">
-          <div>
-              <router-link :to="{ name: 'read', params: {postId : post.id}}">{{post.title}}</router-link>
-          </div>
+    <el-row justify="center">
+        <el-col :span="16">
+            <div class="post" v-for="post in posts" :key="post.id">
+                <div class="flex-column">
+                    <div class="sub category">
+                        Study / Spring
+                    </div>
+                    <h2 class="title">
+                        <router-link :to="{ name: 'read', params: {postId : post.id}}">{{ post.title }}</router-link>
+                    </h2>
+                    <time class="regDate">
+                        2023-04-28
+                    </time>
 
-          <div>
-              {{post.content}}
-          </div>
-      </li>
+                    <div class="content">
+                        {{ post.content }}
+                    </div>
+                </div>
 
-  </ul>
+            </div>
+        </el-col>
+    </el-row>
+
 </template>
 
-<style>
-li {
-    margin-bottom: 1rem;
+<style scoped lang="scss">
+.post {
+  display: flex;
+  height: 250px;
+  align-items: center;
+
+  .title {
+    a {
+      text-decoration: none;
+      font-size: 24px;
+      color: #1E1F21;
+    }
+  }
+
+  .content {
+    margin-top: 12px;
+    color: #9999A1;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .sub {
+    margin-top: 4px;
+    font-size: 14px;
+  }
+
+  .regDate {
+    color: #9999A1;
+  }
 }
 
-li:last-child{
-    margin-bottom: 0;
-}
 </style>
