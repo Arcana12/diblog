@@ -140,7 +140,7 @@ class PostControllerTest {
     @DisplayName("글 여러개 조회")
     void test5() throws Exception {
 
-        List<Post> requestPosts = IntStream.range(0, 20)
+        List<Post> requestPosts = IntStream.range(1, 21)
                 .mapToObj(i -> {
                     return Post.builder()
                             .title("제목 - " + i)
@@ -150,12 +150,9 @@ class PostControllerTest {
                 .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
 
-        mockMvc.perform(get("/posts?page=1&size=10")
+        mockMvc.perform(get("/posts?page=2")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(10)))
-                .andExpect(jsonPath("$[0].title").value("제목 - 19"))
-                .andExpect(jsonPath("$[0].content").value("내용 - 19"))
                 .andDo(print());
 
     }

@@ -29,6 +29,13 @@ const moveToEdit = () => {
     router.push({name: "edit", params: {postId: props.postId}})
 }
 
+const postDelete = function (){
+    axios.delete(`/api/posts/${props.postId}`)
+        .then(() => {
+            router.replace({name: "home"})
+        })
+}
+
 </script>
 
 <template>
@@ -56,6 +63,7 @@ const moveToEdit = () => {
                 <el-col>
                     <div class="d-flex justify-content-end">
                         <el-button type="warning" @click="moveToEdit()">수정</el-button>
+                        <el-button type="danger" @click="postDelete()">삭제</el-button>
                     </div>
                 </el-col>
             </el-row>
@@ -87,5 +95,6 @@ const moveToEdit = () => {
   font-size: 14px;
   color: #9999A1;
 }
+
 
 </style>

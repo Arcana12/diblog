@@ -41,13 +41,12 @@ public class PostController {
     // 단건 조회
     @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable(name = "postId") Long id){
-        PostResponse postResponse = postService.get(id);
-        return postResponse;
+        return postService.get(id);
     }
 
     // 여러개의 글을 조회
     @GetMapping("/posts")
-    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch){
+    public PostSearch getList(@ModelAttribute PostSearch postSearch){
         return postService.getList(postSearch);
     }
 

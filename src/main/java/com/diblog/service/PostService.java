@@ -10,6 +10,7 @@ import com.diblog.request.PostSearch;
 import com.diblog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,10 +46,25 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(PostSearch postSearch){
-        return postRepository.getList(postSearch).stream()
+    public PostSearch getList(PostSearch postSearch){
+        if(postSearch.getPage() == null){
+            postSearch = postSearch.builder().build();
+        }else{
+            postSearch = postSearch.builder()
+                    .page(postSearch.getPage()).
+                    build();
+        }
+
+
+        List<PostResponse> postResponseList = postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
+
+        return PostSearch.builder()
+                .postResponseList(postResponseList)
+                .count(postRepository.getCount())
+                .page(postSearch.getPage())
+                .build();
 
     }
 

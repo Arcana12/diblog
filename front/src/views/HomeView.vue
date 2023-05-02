@@ -3,14 +3,38 @@ import axios from "axios";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 
+const props = defineProps({
+    page: {
+        type: [Number, String],
+        require: true
+    }
+});
+
 const posts = ref([]);
 const router = useRouter();
+const totalCount = ref();
+const pageSize = ref();
+const currentPage = ref();
 
-axios.get("/api/posts?page=1&size=5").then(response => {
-    response.data.forEach((r: any) => {
+
+axios.get("/api/posts").then(response => {
+    response.data.postResponseList.forEach((r: any) => {
         posts.value.push(r);
     })
+    totalCount.value = response.data.count;
+    pageSize.value = response.data.size;
+    currentPage.value = response.data.page;
 })
+
+function movePage(page: number){
+    axios.get(`/api/posts?page=${page}`).then(response => {
+        posts.value = response.data.postResponseList;
+        totalCount.value = response.data.count;
+        pageSize.value = response.data.size;
+        currentPage.value = response.data.page;
+    })
+}
+
 
 </script>
 
@@ -33,7 +57,17 @@ axios.get("/api/posts?page=1&size=5").then(response => {
                         {{ post.content }}
                     </div>
                 </div>
+            </div>
 
+            <div class="paging">
+                <el-pagination :hide-on-single-page="false"
+                               background
+                               layout="prev, pager, next"
+                               :page-size="pageSize"
+                               v-model:current-page="currentPage"
+                               :total="totalCount"
+                               @current-change = "movePage"
+                />
             </div>
         </el-col>
     </el-row>
@@ -70,6 +104,10 @@ axios.get("/api/posts?page=1&size=5").then(response => {
 
   .regDate {
     color: #9999A1;
+  }
+
+  .paging {
+    align-items: center;
   }
 }
 
