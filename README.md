@@ -8,14 +8,14 @@
 
 ## 구현 내용
 Spring을 이용한 Blog API
-<br>
-<br>
-<br>
 ![image](https://user-images.githubusercontent.com/96384842/235093820-009e9c16-7660-4c24-8887-8b9dc90e4661.png)
-
-
 <br>
 <br>
+404 NotFound 예외 처리
+![image](https://github.com/Arcana12/diblog/assets/96384842/457d2bc2-3e2e-43d5-b34b-b4f21e568a01)
+<br>
+<br>
+
 <br>
 <p> 이 프로젝트는 호돌맨님의 강의를 기반으로 만들고 있으며 지속적으로 수정 할 예정입니다.</p>
 <br>
