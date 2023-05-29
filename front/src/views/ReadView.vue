@@ -20,6 +20,11 @@ const post = ref({
 onMounted(() => {
     axios.get(`/api/posts/${props.postId}`).then(response => {
         post.value = response.data;
+    }).catch(function (error){
+        if(error.response.data.code === "404"){
+            alert("해당 글이 존재하지 않습니다.");
+            router.go(-1)
+        }
     })
 })
 

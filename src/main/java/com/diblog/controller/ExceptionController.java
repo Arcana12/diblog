@@ -34,7 +34,6 @@ public class ExceptionController {
         for (FieldError fieldError : e.getFieldErrors()){
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
-
         return response;
     }
 

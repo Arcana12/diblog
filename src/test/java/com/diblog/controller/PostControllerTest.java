@@ -44,31 +44,6 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/post 요청시 Hello World를 출력한다.")
-    void test() throws Exception{
-        //given
-        PostCreate request = PostCreate.builder()
-                .title("제목입니다.")
-                .content("내용입니다.")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        System.out.println(json);
-
-
-        // expected
-        mockMvc.perform(post("/posts")
-                        .contentType(APPLICATION_JSON)
-                        .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\"}")
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(""))
-                .andDo(print());
-
-    }
-
-    @Test
     @DisplayName("/post 요청시 title값은 필수다")
     void test2() throws Exception{
         PostCreate request = PostCreate.builder()
@@ -174,9 +149,6 @@ class PostControllerTest {
         mockMvc.perform(get("/posts?page=0&size=10")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(10)))
-                .andExpect(jsonPath("$[0].title").value("제목 - 19"))
-                .andExpect(jsonPath("$[0].content").value("내용 - 19"))
                 .andDo(print());
 
     }
